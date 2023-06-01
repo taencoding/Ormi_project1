@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기능테스트2</title>
+    <style>
+        /* 입력 창 스타일 */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+            background-size: contain;
+            /* background-repeat: no-repeat; */
+            background-position: center center;
+        }
+
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            width: 70%;
+            max-width: 500px;
+            padding: 9px;
+            background-color: hwb(323 66% 7%);
+            border-radius: 23px;
+            box-shadow: 3px 5px 10px 3px hwb(324 33% 31% / 0.732);
+        }
+
+        .search-input {
+            flex: 1;
+            height: 30px;
+            padding: 5px;
+            font-size: 14px;
+            border: none;
+            outline: none;
+            border-radius: 20px;
+        }
+
+        .search-button {
+            width: 53px;
+            height: 53px;
+            margin-left: 20px;
+            background-color: hwb(323 66% 7%);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 3px 5px 10px 5px hwb(324 33% 31% / 0.732);
+
+        }
+
+        .search-button:hover {
+            background-color: hwb(324 33% 31%);
+        }
+
+        /* 대답 창 스타일  */
+        .response-container {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            height: 30vh;
+            background-size: cover;
+        }
+
+        .response-wrapper {
+            display: flex;
+            background-color: hwb(323 66% 7%);
+            color: #fff;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 3px 5px 10px 3px hwb(324 33% 31% / 0.732);
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .response-content {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .album-info {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .album-info a {
+            color: #fff;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body style="background-image: url('https://i.pinimg.com/564x/8b/47/b6/8b47b67afcf8a3cc4994ee2e9e3a9bc5.jpg')">
+    <!-- 검색창 html -->
+    <div class="search-container">
+        <div class="search-wrapper">
+            <input type="text" class="search-input" autofocus>
+        </div>
+        <div>
+            <button type="submit" class="search-button">▶</button>
+        </div>
+    </div>
+    <!-- 대답창 html -->
+    <div class="response-container">
+        <div class="response-wrapper">
+            <p class="response-content"></p>
+            <div class="album-info">
+                <a href="#" id="youtube-link" target="_blank">앨범 보기</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let $input = document.querySelector('.search-input')
+        let $button = document.querySelector('.search-button')
+        let $responseContainer = document.querySelector('.response-container')
+        let $response = document.querySelector('.response-content')
+        let $albumLink = document.querySelector('#youtube-link')
+
+        let data = [{
+            "role": "system",
+            "content": "assistant는 음악을 추천해주는 DJ이다"
+        }]
+
+        let url = `https://estsoft-openai-api.jejucodingcamp.workers.dev/`;
+
+        $button.addEventListener('click', e => {
+            e.preventDefault()
+            let userInputData = $input.value.trim()
+            $input.value = ''
+
+            if (userInputData === '') return
+
+            data.push({
+                "role": "user",
+                "content": userInputData
+            })
+
+            $responseContainer.style.display = 'none' // 대답창 숨기기
+            chatGptAPI()
+        })
+
+        function chatGptAPI() {
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+                redirect: "follow",
+            })
+                .then(res => res.json())
+                .then(res => {
+                    const answer = res.choices[0].message.content
+                    const albumLink = res.choices[0].message.albumLink
+
+                    $response.innerText = answer
+                    $albumLink.href = albumLink
+                    $albumLink.style.display = albumLink ? "block" : "none"
+
+                    $responseContainer.style.display = 'flex' // 대답창 보이기
+                })
+                .catch(error => {
+                    console.error(error)
+                    $response.innerText = "오류가 발생했습니다. 다시 시도해주세요."
+                    $responseContainer.style.display = 'flex' // 대답창 보이기
+                })
+        }
+    </script>
+</body>
+</html>
