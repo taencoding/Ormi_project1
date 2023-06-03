@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>기능확인</title>
+    <title>기능테스트2</title>
     <style>
         /* 입력 창 스타일 */
         .search-container {
@@ -17,6 +17,7 @@
             background-position: center center;
             /* flex-direction: column; */
             min-width: 550px;
+
         }
 
         .search-wrapper {
@@ -66,6 +67,7 @@
             height: 30vh;
             background-size: cover;
             min-width: 550px;
+            min-height: 20vh;
         }
 
         .response-wrapper {
@@ -79,11 +81,14 @@
             box-shadow: 3px 5px 10px 3px hwb(324 33% 31% / 0.732);
             width: 80%;
             max-width: 500px;
+            flex: 1;
+
         }
 
         .response-content {
             font-size: 14px;
             line-height: 1.5;
+
         }
 
         /* 기분에 따른 추천 */
@@ -137,11 +142,11 @@
         </div>
     </div>
 
-
     <script>
         /* 대답창 숨기기 */
         const responseContainer = document.querySelector('.response-container');
         responseContainer.style.display = 'none';
+
 
         /* submit 누르면 텍스트 검색창에 뜨게 하기*/
         document.addEventListener('DOMContentLoaded', function () {
@@ -161,33 +166,34 @@
 
 
         /* api 연동 */
-        let $input = document.querySelector('.search-input')
-        let $button = document.querySelector('.search-button')
-        let $responseContainer = document.querySelector('.response-container')
-        let $response = document.querySelector('.response-content')
+        let $input = document.querySelector('.search-input');
+        let $button = document.querySelector('.search-button');
+        let $responseContainer = document.querySelector('.response-container');
+        let $response = document.querySelector('.response-content');
 
-        let data = [{
-            "rolr": "system",
-            "content": "assistant는 음악을 추천해주는 DJ이다."
-        }]
+        let data = [
+            {
+                "role": "system",
+                "content": "assistant는 음악을 추천해주는 DJ이다"
+            }
+        ];
 
         let url = `https://estsoft-openai-api.jejucodingcamp.workers.dev/`;
 
         $button.addEventListener('click', e => {
-            e.preventDefault()
-            let userInputData = $input.value.trim()
-            $input.value = ''
+            e.preventDefault();
+            let userInputData = $input.value.trim();
+            $input.value = '';
 
             if (userInputData === '') return;
 
             data.push({
                 "role": "user",
                 "content": userInputData
-            })
+            });
 
-            $responseContainer.style.display = 'none' // 대답창 숨기기
-            chatGptAPI()
-        })
+            chatGptAPI();
+        });
 
         function chatGptAPI() {
             fetch(url, {
@@ -200,19 +206,19 @@
             })
                 .then(res => res.json())
                 .then(res => {
-                    const answer = res.choices[0].message.content
+                    const answer = res.choices[0].message.content;
 
-                    $response.innerText = answer
-
-                    $responseContainer.style.display = 'flex' // 대답창 보이기
+                    $response.innerText = answer;
+                    $responseContainer.style.display = 'flex'; // 대답창 보이기
                 })
                 .catch(error => {
-                    console.error(error)
-                    $response.innerText = "오류가 발생했습니다. 다시 시도해주세요."
-                    $responseContainer.style.display = 'flex' // 대답창 보이기
-                })
+                    console.error(error);
+                    $response.innerText = "오류가 발생했습니다. 다시 시도해주세요.";
+                    $responseContainer.style.display = 'flex'; // 대답창 보이기
+                });
         }
     </script>
+
 
 </body>
 </html>
