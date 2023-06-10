@@ -29,7 +29,15 @@ let $response = document.querySelector('.response-content');
 let data = [
     {
         "role": "system",
-        "content": "assistant는 음악을 추천해주는 DJ이다"
+        "content": "assistant는 음악을 추천해주는 DJ이다."
+    },
+    {
+        "role": "system",
+        "content": "user는 듣고 싶은 노래의 분위기, 현재 상태 등의 정보를 알려줄 것이다. 정보의 컨셉, 분위기, 상황에 맞는 노래를 추천해준다."
+    },
+    {
+        "role": "system",
+        "content": "노래를 추천해줄 때 '노래제목 - 가수' 의 양식으로 10곡을 추천해준다. 노래추천 외의 말은 하지 않는다."
     }
 ];
 

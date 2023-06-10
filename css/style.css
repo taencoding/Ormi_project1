@@ -79,7 +79,7 @@
 }
 
 .response-content {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.5;
 
 }
@@ -95,12 +95,12 @@
 
 .submit-button input {
     display: flex;
-    margin-top: 5px;
+    margin-top: 6px;
     margin-right: 4px;
     border: none;
     color: hwb(324 5% 61% / 0.77);
     background-color: transparent;
-    font-size: 12px;
+    font-size: 13px;
     ;
     cursor: pointer;
 }
