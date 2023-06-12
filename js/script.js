@@ -52,7 +52,7 @@ $button.addEventListener('click', e => {
 
     data.push({
         "role": "user",
-        "content": userInputData
+        "content": `${userInputData} 분위기, 컨셉에 맞는 노래 10곡을 추천해줘.`
     });
 
     chatGptAPI();
